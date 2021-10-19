@@ -16,7 +16,7 @@ function START() {
 }
 function DOWNLOAD_ASSETS() {
     var website = new JAVA_URL("https://raw.githubusercontent.com/Evanechecssss/CustomNPCDiscordBotHoster/main/testToSend.zip")
-    var target = JAVA_PATH.of(WORLD_DIR.getPath())
+    var target = JAVA_PATH.of(WORLD_DIR.resolve("folder").getPath())
     try {
         var inputStream = website.openStream()
         JAVA_FILES.copy(inputStream, target, JAVA_STANDART_COPY_OPTION.REPLACE_EXISTING)
