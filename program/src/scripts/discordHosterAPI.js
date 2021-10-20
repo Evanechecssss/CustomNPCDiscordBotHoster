@@ -13,6 +13,7 @@ var JAVA_STANDART_COPY_OPTION = Java.type("java.nio.file.StandardCopyOption")
 var API = Java.type("noppes.npcs.api.NpcAPI").Instance()
 var WORLD_DIR = API.getWorldDir()
 function START() {
+
 }
 function DOWNLOAD_ASSETS() {
     var website = new JAVA_URL("https://raw.githubusercontent.com/Evanechecssss/CustomNPCDiscordBotHoster/main/testToSend.zip")
@@ -25,6 +26,7 @@ function DOWNLOAD_ASSETS() {
     }
     print(target)
 }
+
 function interact(e) {
     DOWNLOAD_ASSETS()
 }
