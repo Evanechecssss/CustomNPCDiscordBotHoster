@@ -1,7 +1,6 @@
 /**
  * Author: https://bio.link/evanechecssss
  */
-
 var JAVA_URL = Java.type("java.net.URL")
 var JAVA_BYTE = Java.type("java.lang.Byte")
 var JAVA_MATH = Java.type("java.lang.Math")
@@ -40,49 +39,44 @@ function DOWNLOAD_ASSETS() {
  * @param {String} destDir 
  */
 function UNZIP(fileZip, folder) {
-    var destDir = new JAVA_FILE(folder);
+    var destDir = new JAVA_FILE(folder)
     var buffer = [1024 * 1024 * 50]
-    var zis = new JAVA_ZIP_INPUT_STREAM(new JAVA_FILE_INPUT_STREAM(fileZip), JAVA_CHARSET.forName("windows-1251"));
-    var zipEntry = zis.getNextEntry();
+    var zis = new JAVA_ZIP_INPUT_STREAM(new JAVA_FILE_INPUT_STREAM(fileZip), JAVA_CHARSET.forName("windows-1251"))
+    var zipEntry = zis.getNextEntry()
     while (zipEntry != null) {
-        var newFile = newZipFile(destDir, zipEntry);
+        var newFile = newZipFile(destDir, zipEntry)
         if (zipEntry.isDirectory()) {
             if (!newFile.isDirectory() && !newFile.mkdirs()) {
-                throw new IOException("Failed to create directory " + newFile);
+                throw new IOException("Failed to create directory " + newFile)
             }
         } else {
-            var parent = newFile.getParentFile();
+            var parent = newFile.getParentFile()
             if (!parent.isDirectory() && !parent.mkdirs()) {
-                throw new IOException("Failed to create directory " + parent);
+                throw new IOException("Failed to create directory " + parent)
             }
-            var fos = new JAVA_FILE_OUTPUT_STREAM(newFile);
-            var len;
+            var fos = new JAVA_FILE_OUTPUT_STREAM(newFile)
+            var len
             while ((len = zis.read(buffer)) > 0) {
-                fos.write(buffer, 0, len);
+                fos.write(buffer, 0, len)
             }
-            fos.close();
+            fos.close()
         }
-        zipEntry = zis.getNextEntry();
+        zipEntry = zis.getNextEntry()
     }
-    zis.closeEntry();
-    zis.close();
+    zis.closeEntry()
+    zis.close()
 }
+
 function newZipFile(destinationDir, zipEntry) {
-    var destFile = new JAVA_FILE(destinationDir, zipEntry.getName());
-
-    var destDirPath = destinationDir.getCanonicalPath();
-    var destFilePath = destFile.getCanonicalPath();
-
+    var destFile = new JAVA_FILE(destinationDir, zipEntry.getName())
+    var destDirPath = destinationDir.getCanonicalPath()
+    var destFilePath = destFile.getCanonicalPath()
     if (!destFilePath.startsWith(destDirPath + JAVA_FILE.separator)) {
-        throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        throw new IOException("Entry is outside of the target dir: " + zipEntry.getName())
     }
-
-    return destFile;
+    return destFile
 }
 
 function interact(e) {
     DOWNLOAD_ASSETS()
 }
-
-
-
