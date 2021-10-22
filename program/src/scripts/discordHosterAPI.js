@@ -23,8 +23,9 @@ function DOWNLOAD_ASSETS() {
     var website = new JAVA_URL("https://raw.githubusercontent.com/Evanechecssss/CustomNPCDiscordBotHoster/main/testToSend.zip")
     var target = JAVA_FILE_SYSTEM.getDefault().getPath(WORLD_DIR.getPath() + "/content.zip")
     var folder = JAVA_FILE_SYSTEM.getDefault().getPath(WORLD_DIR.getPath() + "/content/")
-    if (!folder.exists()) {
-        folder.mkdir()
+    var folderFile = new JAVA_FILE(folder)
+    if (!folderFile.exists()) {
+        folderFile.mkdir()
     }
     try {
         var inputStream = website.openStream()
@@ -40,21 +41,21 @@ function DOWNLOAD_ASSETS() {
  */
 function UNZIP(fileZip, folder) {
     var destDir = new JAVA_FILE(folder);
-    var buffer = new Uint8Array(1024 * 1024 * 50);
+    var buffer = [1024 * 1024 * 50]
     var zis = new JAVA_ZIP_INPUT_STREAM(new JAVA_FILE_INPUT_STREAM(fileZip), JAVA_CHARSET.forName("windows-1251"));
     var zipEntry = zis.getNextEntry();
     while (zipEntry != null) {
-        var newZipFile = newZipFile(destDir, zipEntry);
+        var newFile = newZipFile(destDir, zipEntry);
         if (zipEntry.isDirectory()) {
-            if (!newZipFile.isDirectory() && !newZipFile.mkdirs()) {
-                throw new IOException("Failed to create directory " + newZipFile);
+            if (!newFile.isDirectory() && !newFile.mkdirs()) {
+                throw new IOException("Failed to create directory " + newFile);
             }
         } else {
-            var parent = newZipFile.getParentFile();
+            var parent = newFile.getParentFile();
             if (!parent.isDirectory() && !parent.mkdirs()) {
                 throw new IOException("Failed to create directory " + parent);
             }
-            var fos = new JAVA_FILE_OUTPUT_STREAM(newZipFile);
+            var fos = new JAVA_FILE_OUTPUT_STREAM(newFile);
             var len;
             while ((len = zis.read(buffer)) > 0) {
                 fos.write(buffer, 0, len);
@@ -82,4 +83,6 @@ function newZipFile(destinationDir, zipEntry) {
 function interact(e) {
     DOWNLOAD_ASSETS()
 }
+
+
 
