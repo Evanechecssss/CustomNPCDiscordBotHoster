@@ -1,8 +1,11 @@
 /**
  * Author: https://bio.link/evanechecssss
  */
+
+/**Needed usage */
 var JAVA_URL = Java.type("java.net.URL")
 var JAVA_BYTE = Java.type("java.lang.Byte")
+var JAVA_RUNTIME = Java.type("java.lang.Runtime")
 var JAVA_MATH = Java.type("java.lang.Math")
 var JAVA_CHARSET = Java.type("java.nio.charset.Charset")
 var JAVA_CHANNELS = Java.type("java.nio.channels.Channels")
@@ -15,9 +18,26 @@ var JAVA_FILE = Java.type("java.io.File")
 var JAVA_FILES = Java.type("java.nio.file.Files")
 var JAVA_FILE_SYSTEM = Java.type("java.nio.file.FileSystems")
 var JAVA_STANDART_COPY_OPTION = Java.type("java.nio.file.StandardCopyOption")
+/**Help vars */
+var targetFile
+var targetFolder
 var API = Java.type("noppes.npcs.api.NpcAPI").Instance()
 var WORLD_DIR = API.getWorldDir()
+/**FLAGS */
+var downloadedFlag = false;
+var unzipedFlag = false;
 
+function START_EXECUTION() {
+    DOWNLOAD_ASSETS()
+    if (downloadedFlag) {
+        UNZIP(targetFile.toString(), targetFolder.toString())
+        downloadedFlag = false;
+    }
+    if (unzipedFlag) {
+        runFileFromPath()
+    }
+
+}
 function DOWNLOAD_ASSETS() {
     var website = new JAVA_URL("https://raw.githubusercontent.com/Evanechecssss/CustomNPCDiscordBotHoster/main/testToSend.zip")
     var target = JAVA_FILE_SYSTEM.getDefault().getPath(WORLD_DIR.getPath() + "/content.zip")
@@ -31,7 +51,9 @@ function DOWNLOAD_ASSETS() {
         JAVA_FILES.copy(inputStream, target, JAVA_STANDART_COPY_OPTION.REPLACE_EXISTING)
     } catch (e) {
     }
-    UNZIP(target.toString(), folder.toString())
+    targetFile = target;
+    target.targetFolder = folder;
+    downloadedFlag = true;
 }
 /**
  * 
@@ -65,6 +87,21 @@ function UNZIP(fileZip, folder) {
     }
     zis.closeEntry()
     zis.close()
+    unzipedFlag = true;
+}
+function TUTORIAL(){
+    
+}
+function runFileFromPath(path) {
+    var p = JAVA_RUNTIME.getRuntime().exec(path.toString());
+    p.waitFor();
+}
+/**
+ * @deprecated
+ */
+function runFileFromString(string) {
+    var p = JAVA_RUNTIME.getRuntime().exec(string);
+    p.waitFor();
 }
 
 function newZipFile(destinationDir, zipEntry) {
